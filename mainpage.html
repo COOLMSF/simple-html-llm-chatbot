@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Calendar</title>
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Calendar container */
+        .calendar {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden;
+        }
+
+        /* Calendar header (month/year + navigation) */
+        .calendar-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        .header-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .current-date {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Week days labels (Sun, Mon, ..., Sat) */
+        .week-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background-color: #ecf0f1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .week-day {
+            padding: 12px;
+            text-align: center;
+            font-weight: 500;
+            color: #7f8c8d;
+        }
+
+        /* Dates grid */
+        .dates {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background-color: #ddd;
+        }
+
+        .date {
+            padding: 15px;
+            background-color: white;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            position: relative;
+        }
+
+        /* Style for dates from previous/next month (faded) */
+        .date.other-month {
+            background-color: #fafafa;
+            color: #bdc3c7;
+        }
+
+        /* Highlight current day */
+        .date.today {
+            background-color: #3498db;
+            color: white;
+            font-weight: 600;
+            border-radius: 50%;
+            transform: scale(1.05);
+        }
+
+        /* Hover effect for dates */
+        .date:not(.other-month):hover {
+            background-color: #f0f7ff;
+        }
+
+        /* Responsive adjustment for small screens */
+        @media (max-width: 480px) {
+            .date {
+                padding: 10px 5px;
+                font-size: 0.9rem;
+            }
+
+            .week-day {
+                padding: 8px;
+                font-size: 0.8rem;
+            }
+
+            .current-date {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar">
+        <!-- Calendar Header (Navigation + Month/Year) -->
+        <div class="calendar-header">
+            <button class="header-btn" id="prev-month">&lt;</button>
+            <div class="current-date" id="current-month-year"></div>
+            <button class="header-btn" id="next-month">&gt;</button>
+        </div>
+
+        <!-- Week Days Labels -->
+        <div class="week-days">
+            <div class="week-day">Sun</div>
+            <div class="week-day">Mon</div>
+            <div class="week-day">Tue</div>
+            <div class="week-day">Wed</div>
+            <div class="week-day">Thu</div>
+            <div class="week-day">Fri</div>
+            <div class="week-day">Sat</div>
+        </div>
+
+        <!-- Dates Grid (Dynamically Generated) -->
+        <div class="dates" id="dates-container"></div>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        const currentMonthYearEl = document.getElementById('current-month-year');
+        const datesContainer = document.getElementById('dates-container');
+
+        // Initialize current date (for default month)
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+
+        // Month names (for display)
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        // Generate calendar for the current month/year
+        function generateCalendar(month, year) {
+            // Clear existing dates
+            datesContainer.innerHTML = '';
+
+            // Update header (month + year)
+            currentMonthYearEl.textContent = `${monthNames[month]} ${year}`;
+
+            // Get 1st day of the month (0 = Sunday, 6 = Saturday)
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+
+            // Get number of days in the current month
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Get number of days in the previous month (for filling empty slots)
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            // 1. Add dates from the previous month (faded)
+            for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+                const dateEl = document.createElement('div');
+                dateEl.classList.add('date', 'other-month');
+                dateEl.textContent = daysInPrevMonth - i;
+                datesContainer.appendChild(dateEl);
+            }
+
+            // 2. Add dates from the current month
+            const today = new Date(); // Get today's date
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dateEl = document.createElement('div');
+                dateEl.classList.add('date');
+                dateEl.textContent = i;
+
+                // Highlight today if it's in the current month/year
+                if (
+                    i === today.getDate() &&
+                    month === today.getMonth() &&
+                    year === today.getFullYear()
+                ) {
+                    dateEl.classList.add('today');
+                }
+
+                datesContainer.appendChild(dateEl);
+            }
+
+            // 3. Add dates from the next month (faded) to fill the grid
+            const totalCells = 42; // 6 rows × 7 columns (max needed for any month)
+            const cellsFilled = firstDayOfMonth + daysInMonth;
+            const daysToAddFromNextMonth = totalCells - cellsFilled;
+
+            for (let i = 1; i <= daysToAddFromNextMonth; i++) {
+                const dateEl = document.createElement('div');
+                dateEl.classList.add('date', 'other-month');
+                dateEl.textContent = i;
+                datesContainer.appendChild(dateEl);
+            }
+        }
+
+        // Navigation: Previous month
+        prevMonthBtn.addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            generateCalendar(currentMonth, currentYear);
+        });
+
+        // Navigation: Next month
+        nextMonthBtn.addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            generateCalendar(currentMonth, currentYear);
+        });
+
+        // Generate calendar on page load (default to current month)
+        generateCalendar(currentMonth, currentYear);
+    </script>
+</body>
+
+<iframe src="http://localhost:1234/chat.html" style="width:400px; height:500px; border:none;"></iframe>
+</html>
