@@ -21,24 +21,72 @@
     }
 
     body {
-      background-color: #f0f2f5;
+      background-color: transparent;
+      margin: 0;
+      padding: 0;
       height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
+      overflow: hidden;
     }
 
     .chat-container {
-      width: 100%;
-      max-width: 500px;
-      height: 700px;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 380px;
+      height: 600px;
       background: white;
-      border-radius: 15px;
+      border-radius: 15px 15px 0 0;
       overflow: hidden;
-      box-shadow: var(--shadow);
+      box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
       display: flex;
       flex-direction: column;
+      transform: translateY(calc(100% - 60px));
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .chat-container.expanded {
+      transform: translateY(0);
+    }
+
+    .chat-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      z-index: 1001;
+      border: none;
+      transition: all 0.3s ease;
+    }
+
+    .chat-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 7px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .chat-toggle i {
+      font-size: 1.5rem;
+    }
+
+    .chat-toggle .close-icon {
+      display: none;
+    }
+
+    .chat-container.expanded + .chat-toggle .open-icon {
+      display: none;
+    }
+
+    .chat-container.expanded + .chat-toggle .close-icon {
+      display: block;
     }
 
     .chat-header {
@@ -47,7 +95,16 @@
       padding: 15px 20px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
+      cursor: pointer;
+    }
+
+    .chat-header h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
     }
 
     .chat-header i {
@@ -56,7 +113,6 @@
 
     .chat-header h2 {
       font-size: 1.2rem;
-      font-weight: 500;
     }
 
     #chatbox {
@@ -183,23 +239,37 @@
     }
 
     /* Responsive adjustments */
-    @media (max-width: 600px) {
+    @media (max-width: 480px) {
       .chat-container {
+        width: 100%;
         height: 100%;
+        bottom: 0;
+        right: 0;
         border-radius: 0;
+        transform: translateY(calc(100% - 60px));
       }
       
-      .message {
-        max-width: 90%;
+      .chat-container.expanded {
+        transform: translateY(0);
+      }
+      
+      .chat-toggle {
+        bottom: 25px;
+        right: 25px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <div class="chat-header">
-      <i class="fas fa-robot"></i>
-      <h2>AI Assistant</h2>
+  <div class="chat-container" id="chatWidget">
+    <div class="chat-header" id="chatHeader">
+      <h2>
+        <i class="fas fa-robot"></i>
+        <span>AI Assistant</span>
+      </h2>
+      <button class="minimize-btn" id="minimizeBtn" style="background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem;">
+        <i class="fas fa-minus"></i>
+      </button>
     </div>
     
     <div id="chatbox">
@@ -222,6 +292,11 @@
       </button>
     </div>
   </div>
+
+  <button class="chat-toggle" id="chatToggle">
+    <i class="fas fa-comment-dots open-icon"></i>
+    <i class="fas fa-times close-icon"></i>
+  </button>
 
   <script>
     const chatbox = document.getElementById("chatbox");
@@ -290,8 +365,49 @@
       }
     }
 
+    // Toggle chat visibility
+    const chatWidget = document.getElementById('chatWidget');
+    const chatToggle = document.getElementById('chatToggle');
+    const chatHeader = document.getElementById('chatHeader');
+    const minimizeBtn = document.getElementById('minimizeBtn');
+    let isExpanded = false;
+
+    function toggleChat() {
+      isExpanded = !isExpanded;
+      chatWidget.classList.toggle('expanded', isExpanded);
+      
+      if (isExpanded) {
+        // Focus input when expanding
+        setTimeout(() => {
+          document.getElementById('userInput').focus();
+        }, 300);
+      }
+    }
+
+    chatToggle.addEventListener('click', toggleChat);
+    chatHeader.addEventListener('click', toggleChat);
+    minimizeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleChat();
+    });
+
+    // Close chat when clicking outside
+    document.addEventListener('click', (e) => {
+      if (isExpanded && 
+          !chatWidget.contains(e.target) && 
+          !chatToggle.contains(e.target)) {
+        toggleChat();
+      }
+    });
+
     // Initialize chat
-    window.onload = showWelcomeMessage;
+    window.onload = function() {
+      showWelcomeMessage();
+      // Auto-expand on mobile for better UX
+      if (window.innerWidth <= 480) {
+        toggleChat();
+      }
+    };
   </script>
 </body>
 </html>

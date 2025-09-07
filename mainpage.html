@@ -3,23 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Calendar</title>
+    <title>UniCloud - Cloud Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Base styles */
+        :root {
+            --primary-color: #0066ff;
+            --secondary-color: #1a1a1a;
+            --text-color: #333;
+            --light-gray: #f8f9fa;
+            --border-color: #e0e0e0;
+            --white: #ffffff;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
 
         body {
-            background-color: #f5f5f5;
+            background-color: var(--white);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 16px;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--white);
+            box-shadow: var(--box-shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 5%;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 102, 255, 0.1);
+        }
+
+        .btn-primary:hover {
+            background: #0052cc;
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 5% 6rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f8faff 0%, #f0f7ff 100%);
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 5%;
+            background: var(--white);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                text-align: center;
+            }
         }
 
         /* Calendar container */
@@ -130,38 +339,160 @@
                 font-size: 1rem;
             }
         }
-    </style>
+        </style>
 </head>
 <body>
-    <div class="calendar">
-        <!-- Calendar Header (Navigation + Month/Year) -->
-        <div class="calendar-header">
-            <button class="header-btn" id="prev-month">&lt;</button>
-            <div class="current-date" id="current-month-year"></div>
-            <button class="header-btn" id="next-month">&gt;</button>
+    <!-- Header -->
+    <header class="header">
+        <a href="/" class="logo">
+            <i class="fas fa-cloud"></i>
+            <span>UniCloud</span>
+        </a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#solutions">Solutions</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <a href="/login" class="btn btn-outline">Log In</a>
+            <a href="/signup" class="btn btn-primary">Get Started Free</a>
         </div>
+    </header>
 
-        <!-- Week Days Labels -->
-        <div class="week-days">
-            <div class="week-day">Sun</div>
-            <div class="week-day">Mon</div>
-            <div class="week-day">Tue</div>
-            <div class="week-day">Wed</div>
-            <div class="week-day">Thu</div>
-            <div class="week-day">Fri</div>
-            <div class="week-day">Sat</div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Powerful Cloud Solutions for Modern Businesses</h1>
+        <p>Deploy, manage, and scale your applications with our secure and reliable cloud infrastructure. Get started in minutes with our intuitive platform.</p>
+        <div class="cta-buttons">
+            <a href="#get-started" class="btn btn-primary">Start Free Trial</a>
+            <a href="#demo" class="btn btn-outline">Watch Demo</a>
         </div>
+    </section>
 
-        <!-- Dates Grid (Dynamically Generated) -->
-        <div class="dates" id="dates-container"></div>
-    </div>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>Everything You Need to Succeed in the Cloud</h2>
+            <p>Our comprehensive suite of cloud services is designed to help your business grow and scale efficiently.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <h3>Cloud Hosting</h3>
+                <p>High-performance cloud servers with 99.9% uptime guarantee and automatic scaling to handle any workload.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Enterprise Security</h3>
+                <p>Enterprise-grade security with DDoS protection, SSL certificates, and advanced threat detection.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+                <h3>Managed Databases</h3>
+                <p>Fully managed database services with automated backups, monitoring, and performance optimization.</p>
+            </div>
+        </div>
+    </section>
+    <!-- Calendar Section -->
+    <section class="calendar-section" style="padding: 6rem 5%; background-color: var(--light-gray);">
+        <div class="section-title">
+            <h2>Interactive Calendar</h2>
+            <p>Plan your schedule with our intuitive calendar interface</p>
+        </div>
+        
+        <div class="calendar-container" style="max-width: 800px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: var(--box-shadow); overflow: hidden;">
+            <div class="calendar-header" style="background: var(--primary-color); color: white; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                <button id="prev-month" class="header-btn" style="background: rgba(255, 255, 255, 0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">
+                    &lt;
+                </button>
+                <div id="current-month-year" class="current-date" style="font-size: 1.25rem; font-weight: 600;"></div>
+                <button id="next-month" class="header-btn" style="background: rgba(255, 255, 255, 0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">
+                    &gt;
+                </button>
+            </div>
+
+            <div class="week-days" style="display: grid; grid-template-columns: repeat(7, 1fr); background: #f5f7fa; padding: 0.75rem 0; text-align: center; font-weight: 600; color: var(--secondary-color);">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
+
+            <div id="dates-container" class="dates" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: #e9ecef; padding: 1px;">
+                <!-- Dates will be generated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: var(--secondary-color); color: white; padding: 4rem 5% 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+            <div class="footer-logo" style="margin-bottom: 1.5rem;">
+                <a href="/" style="color: white; text-decoration: none; font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-cloud"></i>
+                    <span>UniCloud</span>
+                </a>
+                <p style="margin-top: 1rem; color: #adb5bd; font-size: 0.9rem;">Powering the future of cloud computing with innovative solutions for businesses of all sizes.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h4 style="color: white; margin-bottom: 1.25rem; font-size: 1.1rem;">Product</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #adb5bd; text-decoration: none; transition: color 0.2s;">Features</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #adb5bd; text-decoration: none; transition: color 0.2s;">Pricing</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #adb5bd; text-decoration: none; transition: color 0.2s;">Enterprise</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #adb5bd; text-decoration: none; transition: color 0.2s;">Integrations</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links">
+                <h4 style="color: white; margin-bottom: 1.25rem; font-size: 1.1rem;">Company</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #adb5bd; text-decoration: none; transition: color 0.2s;">About Us</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #adb5bd; text-decoration: none; transition: color 0.2s;">Careers</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #adb5bd; text-decoration: none; transition: color 0.2s;">Blog</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#" style="color: #adb5bd; text-decoration: none; transition: color 0.2s;">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-newsletter">
+                <h4 style="color: white; margin-bottom: 1.25rem; font-size: 1.1rem;">Subscribe to our newsletter</h4>
+                <p style="color: #adb5bd; margin-bottom: 1rem; font-size: 0.9rem;">Get the latest updates and news.</p>
+                <form style="display: flex; gap: 0.5rem;">
+                    <input type="email" placeholder="Enter your email" style="flex: 1; padding: 0.6rem 1rem; border: 1px solid #495057; border-radius: 4px; background: #2b3035; color: white; outline: none;">
+                    <button type="submit" style="background: var(--primary-color); color: white; border: none; border-radius: 4px; padding: 0 1.25rem; cursor: pointer; transition: background 0.2s;">Subscribe</button>
+                </form>
+                <div class="social-links" style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                    <a href="#" style="color: #adb5bd; font-size: 1.25rem;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" style="color: #adb5bd; font-size: 1.25rem;"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" style="color: #adb5bd; font-size: 1.25rem;"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #495057; text-align: center; color: #6c757d; font-size: 0.85rem;">
+            <p>&copy; 2023 UniCloud. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
         // Get DOM elements
-        const prevMonthBtn = document.getElementById('prev-month');
-        const nextMonthBtn = document.getElementById('next-month');
-        const currentMonthYearEl = document.getElementById('current-month-year');
-        const datesContainer = document.getElementById('dates-container');
+        const prevMonthBtn = document.getElementById("prev-month");
+        const nextMonthBtn = document.getElementById("next-month");
+        const currentMonthYearEl = document.getElementById("current-month-year");
+        const datesContainer = document.getElementById("dates-container");
 
         // Initialize current date (for default month)
         let currentDate = new Date();
@@ -194,7 +525,10 @@
             // 1. Add dates from the previous month (faded)
             for (let i = firstDayOfMonth - 1; i >= 0; i--) {
                 const dateEl = document.createElement('div');
-                dateEl.classList.add('date', 'other-month');
+                dateEl.style.padding = '1rem';
+                dateEl.style.textAlign = 'center';
+                dateEl.style.background = '#fff';
+                dateEl.style.color = '#adb5bd';
                 dateEl.textContent = daysInPrevMonth - i;
                 datesContainer.appendChild(dateEl);
             }
@@ -203,17 +537,65 @@
             const today = new Date(); // Get today's date
             for (let i = 1; i <= daysInMonth; i++) {
                 const dateEl = document.createElement('div');
-                dateEl.classList.add('date');
+                dateEl.style.padding = '1rem';
+                dateEl.style.textAlign = 'center';
+                dateEl.style.background = '#fff';
+                dateEl.style.cursor = 'pointer';
+                dateEl.style.transition = 'all 0.2s ease';
                 dateEl.textContent = i;
 
                 // Highlight today if it's in the current month/year
-                if (
-                    i === today.getDate() &&
-                    month === today.getMonth() &&
-                    year === today.getFullYear()
-                ) {
-                    dateEl.classList.add('today');
+                if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    dateEl.style.background = 'var(--primary-color)';
+                    dateEl.style.color = 'white';
+                    dateEl.style.borderRadius = '50%';
+                    dateEl.style.width = '40px';
+                    dateEl.style.height = '40px';
+                    dateEl.style.display = 'flex';
+                    dateEl.style.alignItems = 'center';
+                    dateEl.style.justifyContent = 'center';
+                    dateEl.style.margin = '4px auto';
                 }
+
+                // Add hover effect
+                dateEl.addEventListener('mouseenter', () => {
+                    if (!dateEl.style.background.includes('var(--primary-color)')) {
+                        dateEl.style.background = '#f8f9fa';
+                    }
+                });
+
+                dateEl.addEventListener('mouseleave', () => {
+                    if (!dateEl.style.background.includes('var(--primary-color)')) {
+                        dateEl.style.background = '#fff';
+                    }
+                });
+
+                // Add click event to select date
+                dateEl.addEventListener('click', () => {
+                    // Remove selected class from all dates
+                    document.querySelectorAll('#dates-container > div').forEach(el => {
+                        el.style.background = '';
+                        el.style.color = '';
+                        el.style.borderRadius = '';
+                        el.style.width = '';
+                        el.style.height = '';
+                        el.style.display = '';
+                        el.style.alignItems = '';
+                        el.style.justifyContent = '';
+                        el.style.margin = '';
+                    });
+
+                    // Style the clicked date
+                    dateEl.style.background = 'var(--primary-color)';
+                    dateEl.style.color = 'white';
+                    dateEl.style.borderRadius = '50%';
+                    dateEl.style.width = '40px';
+                    dateEl.style.height = '40px';
+                    dateEl.style.display = 'flex';
+                    dateEl.style.alignItems = 'center';
+                    dateEl.style.justifyContent = 'center';
+                    dateEl.style.margin = '4px auto';
+                });
 
                 datesContainer.appendChild(dateEl);
             }
@@ -225,14 +607,18 @@
 
             for (let i = 1; i <= daysToAddFromNextMonth; i++) {
                 const dateEl = document.createElement('div');
-                dateEl.classList.add('date', 'other-month');
+                dateEl.style.padding = '1rem';
+                dateEl.style.textAlign = 'center';
+                dateEl.style.background = '#fff';
+                dateEl.style.color = '#adb5bd';
                 dateEl.textContent = i;
                 datesContainer.appendChild(dateEl);
             }
         }
 
         // Navigation: Previous month
-        prevMonthBtn.addEventListener('click', () => {
+        prevMonthBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             currentMonth--;
             if (currentMonth < 0) {
                 currentMonth = 11;
@@ -242,7 +628,8 @@
         });
 
         // Navigation: Next month
-        nextMonthBtn.addEventListener('click', () => {
+        nextMonthBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             currentMonth++;
             if (currentMonth > 11) {
                 currentMonth = 0;
@@ -251,10 +638,183 @@
             generateCalendar(currentMonth, currentYear);
         });
 
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
         // Generate calendar on page load (default to current month)
         generateCalendar(currentMonth, currentYear);
+
+        // Add animation to features on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe feature cards
+        document.querySelectorAll('.feature-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+            observer.observe(card);
+        });
     </script>
+    <style>
+        .chatbot-iframe-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            transition: all 0.3s ease;
+            transform-origin: bottom right;
+            max-height: 80vh;
+        }
+        
+        .chatbot-iframe-container iframe {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            width: 400px;
+            height: 600px;
+            display: block;
+        }
+        
+        .chatbot-iframe-container.collapsed iframe {
+            transform: scale(0);
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .chatbot-toggle-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #4a6fa5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-toggle-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+        }
+        
+        .chatbot-toggle-button i {
+            color: white;
+            font-size: 28px;
+            transition: transform 0.3s ease;
+        }
+        
+        .chatbot-iframe-container.collapsed + .chatbot-toggle-button i {
+            transform: rotate(0deg);
+        }
+        
+        .chatbot-iframe-container:not(.collapsed) + .chatbot-toggle-button i {
+            transform: rotate(90deg);
+        }
+        
+        @media (max-width: 600px) {
+            .chatbot-iframe-container {
+                bottom: 0;
+                right: 0;
+                left: 0;
+                width: 100%;
+                border-radius: 0;
+                transform: none !important;
+            }
+            
+            .chatbot-iframe-container iframe {
+                width: 100%;
+                height: 80vh;
+                border-radius: 0;
+                transform: none !important;
+            }
+            
+            .chatbot-toggle-button {
+                bottom: 25px;
+                right: 25px;
+            }
+        }
+    </style>
 </body>
 
-<iframe src="http://localhost:1234/chat.html" style="width:400px; height:500px; border:none;"></iframe>
+<div class="chatbot-iframe-container collapsed">
+    <iframe src="http://localhost:1234/chat.html"></iframe>
+</div>
+<button class="chatbot-toggle-button" id="chatbotToggle">
+    <i class="fas fa-robot"></i>
+</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.querySelector('.chatbot-iframe-container');
+        const toggleButton = document.getElementById('chatbotToggle');
+        
+        // Toggle chat visibility
+        function toggleChat() {
+            container.classList.toggle('collapsed');
+            
+            // If opening, focus the input inside the iframe
+            if (!container.classList.contains('collapsed')) {
+                setTimeout(() => {
+                    const iframe = container.querySelector('iframe');
+                    if (iframe && iframe.contentWindow) {
+                        const input = iframe.contentDocument?.querySelector('#userInput');
+                        if (input) input.focus();
+                    }
+                }, 300);
+            }
+        }
+        
+        // Toggle on button click
+        toggleButton.addEventListener('click', toggleChat);
+        
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!container.classList.contains('collapsed') && 
+                !container.contains(e.target) && 
+                !toggleButton.contains(e.target)) {
+                container.classList.add('collapsed');
+            }
+        });
+        
+        // Prevent iframe clicks from closing the chat
+        container.querySelector('iframe')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    });
+</script>
 </html>
